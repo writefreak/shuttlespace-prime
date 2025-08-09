@@ -6,33 +6,48 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
+        // tabBarShowLabel: false,
         tabBarStyle: {
-          height: 90,
+          height: 80,
+          // position: "absolute", // allows free positioning
+          // bottom: 30, // lifts it 20px above bottom
+          // left: 20, // some space on sides
+          // right: 20,
+          // elevation: 5, // Android shadow
+          // backgroundColor: "#fff", // solid bg to float over content
+          // borderRadius: 100, // round corners for pill shape
+          // shadowColor: "#000", // iOS shadow
+          // shadowOffset: { width: 0, height: 10 },
+          // shadowOpacity: 0.12,
+          // shadowRadius: 10,
         },
       }}
     >
       <Tabs.Screen
-        name="Home"
+        name="(home)"
         options={{
           headerShown: false,
-          tabBarActiveBackgroundColor: "#003380ff",
+          title: "Home",
 
           tabBarIcon: ({ color, size }) => <House color={color} size={size} />,
         }}
       />
       <Tabs.Screen
-        name="recent"
+        name="recentRides"
         options={{
           headerShown: false,
+          title: "Recent",
+
           tabBarIcon: ({ color, size }) => (
             <History color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
-        name="Profile"
+        name="profile"
         options={{
           title: "Profile",
+
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <UserRound color={color} size={size} />
