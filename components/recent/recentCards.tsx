@@ -14,11 +14,13 @@ import NavHeader from "../ui/navHeader";
 export default function RecentCards() {
   return (
     <View className="bg-white flex-1">
-      <NavHeader className="flex-col items-center justify-center ">
-        <Text className="text-xl font-semibold text-[#003380ff]">
-          Recent Rides
-        </Text>
-      </NavHeader>
+      <View className="pt-5">
+        <NavHeader className="flex-col items-center justify-center ">
+          <Text className="text-xl font-semibold text-[#003380ff]">
+            Recent Rides
+          </Text>
+        </NavHeader>
+      </View>
       <SafeAreaView
         edges={["top", "left", "right"]}
         className="flex-1  p-4 gap-10"
@@ -58,9 +60,8 @@ export default function RecentCards() {
             <View>
               <View className="flex-col gap-4">
                 {details.map((d) => (
-                  <View className="flex-row items-center gap-3">
+                  <View key={d.id} className="flex-row items-center gap-3">
                     <View
-                      key={d.id}
                       className={
                         "h-14 w-14 rounded-full flex  items-center justify-center bg-[#003380ff]/10"
                       }
@@ -81,9 +82,8 @@ export default function RecentCards() {
               <View>
                 <View className="flex-col gap-4">
                   {progress.map((p) => (
-                    <View className="flex-row items-center gap-3">
+                    <View key={p.id} className="flex-row items-center gap-3">
                       <View
-                        key={p.id}
                         className={
                           p.id === 3
                             ? "h-14 w-14 rounded-full flex border border-[#003380ff] items-center justify-center bg-[#003380ff]/10"
