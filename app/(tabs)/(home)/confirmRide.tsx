@@ -1,106 +1,176 @@
 import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import { router } from "expo-router";
-import { Text, View } from "react-native";
+import {
+  BadgeCheck,
+  Car,
+  HandCoins,
+  MapPin,
+  MessageSquareText,
+  Phone,
+  User,
+} from "lucide-react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function ConfirmRide() {
+export default function RecentCards() {
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <NavHeader className="flex-col items-center justify-center ">
-        <Text className="text-xl font-semibold text-[#003380ff]">
-          Confirm your Booked Ride
-        </Text>
-      </NavHeader>
-      <View className="p-4 flex-col gap-10">
-        <View className="pt-10">
-          <Text className="text-2xl font-semibold text-[#003380ff]">
-            Booking Details
+    <ScrollView className="bg-white flex-1">
+      <View className="pt-5">
+        <NavHeader className="flex-col items-center justify-center ">
+          <Text className="text-xl font-semibold text-[#003380ff]">
+            Confirm Your Ride
           </Text>
-        </View>
-        <View className="flex-col gap-6">
-          {booking.map((b) => (
-            <View
-              key={b.id}
-              className="flex-row items-center gap-3 border-b border-neutral-300 rounded-2xl p-4"
-            >
-              <Text className=" text-xl font-semibold ">{b.title}</Text>
-              <Text className="text-lg text-gray-500 justify-end">
-                {b.desc}
-              </Text>
+        </NavHeader>
+      </View>
+      <SafeAreaView
+        edges={["top", "left", "right"]}
+        className="flex-1  p-4 gap-10"
+      >
+        <View className="p-6 bg-white border border-neutral-300 rounded-xl ">
+          <View className="flex-row items-center justify-between bg-[#003380ff]/10 p-4 rounded-xl">
+            <View className="flex-row items-center gap-3">
+              <View className="h-14 w-14 bg-[#003380ff] rounded-full flex items-center justify-center">
+                <Text className="text-white text-2xl font-medium">H</Text>
+              </View>
+              <View>
+                <Text className="font-medium text-lg">6th Jan 2025</Text>
+                <Text className="text-neutral-500 text-sm">
+                  Booked at 10:00am
+                </Text>
+              </View>
             </View>
-          ))}
-          <View className=" flex-col gap-7">
-            <View className="flex-row items-center gap-3 rounded-2xl p-4">
-              <Text className=" text-xl font-semibold text-[#003380ff]">
-                Total Bill:
-              </Text>
-              <Text className="text-lg text-gray-500 justify-end">N 200</Text>
-            </View>
-          </View>
-
-          <View className="flex-row w-full gap-4 pt-28">
-            {buttonOp.map((b) => (
-              <Button
-                onPress={() => router.push(b.path as any)}
-                key={b.id}
-                className={
-                  b.id === "Continue"
-                    ? `flex-1 py-2  h-12 items-center justify-center`
-                    : " flex-1 h-12 items-center justify-center bg-transparent border border-[#003380ff]"
-                }
-              >
-                <Text
+            {/* <View className="flex-row gap-3">
+              {buttons.map((b) => (
+                <View
+                  key={b.id}
                   className={
-                    b.id === "Continue" ? `text-lg` : "text-lg text-[#003380ff]"
+                    b.id === 1
+                      ? `h-10 w-10 rounded-full border border-[#003380ff] flex items-center justify-center`
+                      : "h-10 w-10 rounded-full  flex items-center justify-center bg-[#003380ff]"
                   }
                 >
-                  {b.id}
-                </Text>
-              </Button>
+                  <TouchableOpacity>{b.icon}</TouchableOpacity>
+                </View>
+              ))}
+            </View> */}
+          </View>
+
+          <View className="pt-8 pb-4">
+            <Text className="font-medium text-xl text-[#003380ff]">
+              Booking Status
+            </Text>
+          </View>
+          <View className="gap-4">
+            {details.map((d) => (
+              <View key={d.id} className="flex-row items-center gap-3">
+                <View
+                  className={
+                    "h-14 w-14 rounded-full flex  items-center justify-center bg-[#003380ff]/10"
+                  }
+                >
+                  <TouchableOpacity>{d.icon}</TouchableOpacity>
+                </View>
+                <View className="flex-row gap-2 items-center">
+                  <Text className="font-medium text-lg">{d.slug}:</Text>
+                  <Text className="text-neutral-500">{d.value}</Text>
+                </View>
+              </View>
             ))}
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+        <Button
+          onPress={() => router.push("/payment")}
+          className="w-full h-12 items-center justify-center"
+        >
+          <Text className="text-xl">Confirm Ride</Text>
+        </Button>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 
-const buttonOp = [
-  {
-    id: "Back",
-    path: "/ride",
-  },
-  {
-    id: "Continue",
-    path: "/payment",
-  },
-];
-
-const booking = [
+const buttons = [
   {
     id: 1,
-    title: "Student Name:",
-    desc: "Endwell Heritage",
+    icon: (
+      <MessageSquareText
+        height={20}
+        width={20}
+        color={"white"}
+        fill={"#003380ff"}
+      />
+    ),
   },
   {
     id: 2,
-    title: "Current Location:",
-    desc: "F&G Hostel",
+    icon: <Phone height={15} width={15} color={"white"} fill={"white"} />,
+  },
+];
+const progress = [
+  {
+    id: 1,
+    icon: (
+      <BadgeCheck
+        height={23}
+        width={23}
+        color={"white"}
+        strokeWidth={1}
+        fill={"#003380ff"}
+      />
+    ),
+    slug: "Booking confirmed",
+  },
+  {
+    id: 2,
+    icon: (
+      <BadgeCheck
+        height={23}
+        width={23}
+        color={"white"}
+        strokeWidth={1}
+        fill={"#003380ff"}
+      />
+    ),
+    slug: "Driver confirmed",
   },
   {
     id: 3,
-    title: "Destination:",
-    desc: "Management Building",
+    icon: (
+      <MapPin
+        height={23}
+        width={23}
+        color={"white"}
+        strokeWidth={1}
+        fill={"#003380ff"}
+      />
+    ),
+    slug: "Destination Reached",
+  },
+];
+const details = [
+  {
+    id: 1,
+    icon: <User color={"#003380ff"} height={23} width={23} />,
+    slug: "Driver",
+    value: "Heritage",
+  },
+  {
+    id: 2,
+    icon: <Car color={"#003380ff"} height={23} width={23} />,
+    slug: "Category",
+    value: "Shuttle",
+  },
+  {
+    id: 3,
+    icon: <MapPin color={"#003380ff"} height={23} width={23} />,
+    slug: "Destination",
+    value: "MainGate",
   },
   {
     id: 4,
-    title: "Destination Category:",
-    desc: "Management/Environmental",
-  },
-  {
-    id: 6,
-    title: "Ride Category:",
-    desc: "Shuttle",
+    icon: <HandCoins color={"#003380ff"} height={23} width={23} />,
+    slug: "Total Payment ",
+    value: "N200",
   },
 ];

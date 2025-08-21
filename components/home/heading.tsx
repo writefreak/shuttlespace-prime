@@ -1,6 +1,7 @@
-import { BellDot, Menu } from "lucide-react-native";
+import { BellDot } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Menu from "./menu";
 
 export default function Heading() {
   return (
@@ -26,9 +27,10 @@ export default function Heading() {
             </TouchableOpacity>
           </View>
           <View className="">
-            <TouchableOpacity className="h-12 w-12 rounded-xl md:h-10 md:w-10 bg-white shadow-2xl md:shadow-sm flex items-center justify-center">
+            {/* <TouchableOpacity className="h-12 w-12 rounded-xl md:h-10 md:w-10 bg-white shadow-2xl md:shadow-sm flex items-center justify-center">
               <Menu color={"#003380ff"} height={18} width={18} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <Menu />
           </View>
         </View>
       </View>

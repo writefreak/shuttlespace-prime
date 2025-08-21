@@ -20,14 +20,40 @@
 //   }
 // }
 
+// {
+//   "cli": {
+//     "version": ">= 16.17.4",
+//     "appVersionSource": "remote"
+//   },
+//   "build": {
+//     "development": {
+//       "developmentClient": true,
+//       "distribution": "internal",
+//       "android": {
+//         "buildType": "apk"
+//       }
+//     },
+//     "preview": {
+//       "distribution": "internal",
+//       "android": {
+//         "buildType": "apk"
+//       }
+//     },
+//     "production": {
+//       "autoIncrement": true,
+//       "android": {
+//         "buildType": "app-bundle"
+//       }
+//     }
+//   },
+//   "submit": {
+//     "production": {}
+//   }
+// }
+
 {
-  "cli": {
-    "version": ">= 16.17.4",
-    "appVersionSource": "remote"
-  },
   "build": {
     "development": {
-      "developmentClient": true,
       "distribution": "internal",
       "android": {
         "buildType": "apk"
@@ -40,13 +66,10 @@
       }
     },
     "production": {
-      "autoIncrement": true,
+      "distribution": "store",
       "android": {
         "buildType": "app-bundle"
       }
     }
-  },
-  "submit": {
-    "production": {}
   }
 }

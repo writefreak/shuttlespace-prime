@@ -115,6 +115,6 @@ const buttonOp = [
   },
   {
     id: "Continue",
-    path: "/confirmRide",
+    path: "/bookingDetails",
   },
 ];

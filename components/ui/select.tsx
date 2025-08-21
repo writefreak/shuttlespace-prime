@@ -45,13 +45,13 @@ const Select: React.FC<SelectProps> = ({
         onRequestClose={toggleModal}
       >
         <View className="flex-1 justify-center items-center bg-white/80 backdrop-blur-xl bg-opacity-50">
-          <View className="bg-white p-4 rounded-lg shadow-lg">
-            <Text className="text-lg font-bold mb-4 ">{placeholder}</Text>
+          <View className="bg-white w-64 p-5  rounded-lg shadow-lg">
+            <Text className="text-xl font-medium mb-4 ">{placeholder}</Text>
             {options.map((option, index) => (
               <TouchableOpacity
                 key={index}
                 onPress={() => handleSelect(option)}
-                className="p-3 border-b border-gray-200"
+                className="p-3 py-4 border-b border-gray-200"
               >
                 <Text className="text-lg">{option}</Text>
               </TouchableOpacity>
