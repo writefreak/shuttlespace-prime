@@ -1,7 +1,7 @@
 import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import Select from "@/components/ui/select";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -43,6 +43,7 @@ export default function Login() {
       }
 
       Alert.alert("Login Successful:", data.user);
+      router.push("/home");
     } catch (error: any) {
       console.error("Login error:", error);
       Alert.alert("Error", error.message || "Something went wrong");
@@ -69,42 +70,56 @@ export default function Login() {
                 Sign into Your Account Here
               </Text>
             </View>
-            <View className="gap-7 pb-5">
-              {passDetails.map((p) => (
-                <View key={p.id} className="gap-3">
-                  <Text className="text-neutral-500">{p.value}</Text>
-                  <TextInput
-                    className={
-                      "py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
-                    }
-                    placeholder={p.placeholder}
-                  />
-                </View>
-              ))}
-              <View className="gap-3">
-                <Text className="text-neutral-500">
-                  Are you a Passenger or Driver?
-                </Text>
-                <Select options={["Passenger", "Driver"]} onSelect={setRole} />
-              </View>
+
+            {/* Email Input */}
+            <View className="gap-3">
+              <Text className="text-neutral-500">Email</Text>
+              <TextInput
+                value={email}
+                onChangeText={setEmail}
+                className="py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
+                placeholder="Enter your Email"
+              />
+            </View>
+
+            {/* Password Input */}
+            <View className="gap-3">
+              <Text className="text-neutral-500">Password</Text>
+              <TextInput
+                value={password}
+                onChangeText={setPassword}
+                className="py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
+                placeholder="Enter your Password"
+                secureTextEntry
+              />
+            </View>
+
+            {/* Role Selector */}
+            <View className="gap-3">
+              <Text className="text-neutral-500">
+                Are you a Passenger or Driver?
+              </Text>
+              <Select options={["Passenger", "Driver"]} onSelect={setRole} />
             </View>
           </View>
-          {role == "Driver" && (
+
+          {/* Driver Fields */}
+          {role === "Driver" && (
             <View className="gap-7 p-4 pt-5">
-              {driveDetails.map((d) => (
-                <View key={d.id} className="gap-3">
-                  <Text className="text-neutral-500">{d.value}</Text>
-                  <TextInput
-                    className={
-                      "py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
-                    }
-                    placeholder={d.placeholder}
-                  />
-                </View>
-              ))}
+              <View className="gap-3">
+                <Text className="text-neutral-500">Serial Number</Text>
+                <TextInput
+                  value={vehicleSerialNo}
+                  onChangeText={setVehicleSerialNo}
+                  className="py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
+                  placeholder="Enter your vehicle serial number"
+                />
+              </View>
             </View>
           )}
-          <View className="px-4 gap-4">
+
+          {/* Login Button and Signup Link */}
+          <View className="px-4 gap-4 pt-5">
             <Button
               onPress={handleLogin}
               className="w-full h-12 items-center justify-center bg-[#003380ff] rounded-xl"
