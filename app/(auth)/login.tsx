@@ -1,18 +1,55 @@
 import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import Select from "@/components/ui/select";
-import { Link, router } from "expo-router";
+import { Link } from "expo-router";
 import { useState } from "react";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import { Alert, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Login() {
   const [role, setRole] = useState("");
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [vehicleSerialNo, setVehicleSerialNo] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      return Alert.alert("Error", "Please fill in all required fields");
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "https://shuttlespace-backend.vercel.app/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+            vehicleSerialNo,
+          }),
+        }
+      );
+      const data = await response.json();
+
+      if (!response) {
+        return Alert.alert(
+          "Login Failed",
+          data.error || "Something Went Wrong"
+        );
+      }
+
+      Alert.alert("Login Successful:", data.user);
+    } catch (error: any) {
+      console.error("Login error:", error);
+      Alert.alert("Error", error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} className="bg-white flex-1">
@@ -69,10 +106,12 @@ export default function Login() {
           )}
           <View className="px-4 gap-4">
             <Button
-              onPress={() => router.push("/home")}
-              className="w-full h-12 items-center justify-center"
+              onPress={handleLogin}
+              className="w-full h-12 items-center justify-center bg-[#003380ff] rounded-xl"
             >
-              <Text className="text-xl">Login</Text>
+              <Text className="text-xl text-white">
+                {loading ? "Logging you in..." : "Login "}
+              </Text>
             </Button>
             <View className="flex-row gap-2">
               <Text className="text-neutral-500">Don't have an account?</Text>
