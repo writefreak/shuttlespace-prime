@@ -5,7 +5,7 @@ export default function PaymentLayout() {
   return (
     <PaystackProvider
       debug
-      publicKey="pk_test_d08a3f40c750a0fbaa7548afc1fa2cc719a40419"
+      publicKey="pk_live_53c611fb192343498bc18ad911ec3bafd7175c3a"
       currency="NGN"
       defaultChannels={["card", "mobile_money"]}
     >

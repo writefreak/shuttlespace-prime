@@ -1,10 +1,29 @@
 import NavHeader from "@/components/ui/navHeader";
-import { router } from "expo-router";
 import { ChevronRight } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
+import { usePaystack } from "react-native-paystack-webview";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Payment() {
+  const { popup } = usePaystack();
+
+  const paynow = () => {
+    popup.newTransaction({
+      email: "Hello@gmail.com",
+      amount: 30000,
+      reference: `TXN_${Date.now()}`,
+      onSuccess: async (res) => {
+        console.log("success");
+      },
+      onCancel: () => {
+        console.log("cancel");
+      },
+      onError: () => {
+        console.error("error");
+      },
+    });
+  };
+
   return (
     <SafeAreaView edges={["top", "right", "left"]} className="bg-white flex-1">
       <NavHeader className="flex-col items-center justify-center ">
@@ -25,7 +44,7 @@ export default function Payment() {
         <View className="  pb-5 flex-col gap-6">
           {details.map((d) => (
             <TouchableOpacity
-              onPress={() => router.push("/paystack")}
+              onPress={paynow}
               key={d.id}
               className="border border-gray-300 rounded-3xl px-7 py-6"
             >
