@@ -25,7 +25,7 @@ export default function Payment() {
         <View className="  pb-5 flex-col gap-6">
           {details.map((d) => (
             <TouchableOpacity
-              onPress={() => router.push("/rideSuccess")}
+              onPress={() => router.push("/paystack")}
               key={d.id}
               className="border border-gray-300 rounded-3xl px-7 py-6"
             >
@@ -47,7 +47,7 @@ const details = [
   {
     id: 1,
     desc: "Pay via Paystack",
-    url: "/rideSuccess",
+    url: "/paystack",
   },
   {
     id: 2,

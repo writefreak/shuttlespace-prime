@@ -1,11 +1,12 @@
+import { router } from "expo-router";
 import {
   ChevronRight,
   HandCoins,
   History,
   LogOut,
   Settings,
-  SquarePen,
   Trash,
+  User,
 } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,6 +27,7 @@ export default function ProfileList() {
       <View className="px-4 pt-12 pb-5 flex-col gap-6">
         {details.map((d) => (
           <TouchableOpacity
+            onPress={() => router.push(d.link as any)}
             key={d.id}
             className="border border-gray-300 rounded-3xl px-7 py-6"
           >
@@ -46,32 +48,38 @@ export default function ProfileList() {
 const details = [
   {
     id: 1,
-    desc: "Edit Personal Details",
-    icon: <SquarePen color={"gray"} />,
+    desc: "View Personal Details",
+    icon: <User color={"gray"} />,
+    link: "/(profile)/personalDet",
   },
   {
     id: 2,
     desc: "Settings & Security",
     icon: <Settings color={"gray"} />,
+    link: "",
   },
   {
     id: 3,
     desc: "Booking History",
     icon: <History color={"gray"} />,
+    link: "",
   },
   {
     id: 4,
     desc: "Payment Info",
     icon: <HandCoins color={"gray"} />,
+    link: "",
   },
   {
     id: 5,
     desc: "Log Out",
     icon: <LogOut color={"gray"} />,
+    link: "/login",
   },
   {
     id: 6,
     desc: "Delete Account",
     icon: <Trash color={"gray"} />,
+    link: "",
   },
 ];

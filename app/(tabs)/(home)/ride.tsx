@@ -3,20 +3,64 @@ import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import Select from "@/components/ui/select";
 import { router } from "expo-router";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import { useState } from "react";
+import { Alert, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 export default function Ride() {
   const handleSelect = (value: string) => {
     console.log("Selected option:", value);
   };
+
+  const [pickupLocationId, setPickupLocationId] = useState("");
+  const [destinationId, setDestinationId] = useState("");
+  const [driverId, setDriverId] = useState("");
+  const [destinationCat, setDestinationCat] = useState("");
+  const [rideCategory, setrideCategory] = useState("");
+
+  const handleBooking = async () => {
+    try {
+      const res = await fetch(
+        "https://shuttlespace-backend.vercel.app/api/shuttle/bookRide",
+        {
+          method: "POST",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({
+            pickupLocationId,
+            destinationId,
+            driverId,
+            destinationCat,
+            rideCategory,
+          }),
+        }
+      );
+
+      if (
+        !pickupLocationId ||
+        !destinationId ||
+        !destinationCat ||
+        !rideCategory
+      ) {
+        return Alert.alert("Error", "Please fill all fields before booking");
+      }
+      const data = await res.json();
+      if (!res.ok) return Alert.alert("Error", data.error);
+
+      Alert.alert("Success", "Ride booked successfully!");
+      router.push("/bookingDetails");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "Something went wrong");
+    }
+  };
+
   return (
     <SafeAreaView className="bg-white flex-1">
+      <NavHeader className="flex-col items-center justify-center">
+        <Text className="text-xl font-semibold text-[#003380ff]">
+          Book a Ride
+        </Text>
+      </NavHeader>
       <ScrollView>
-        <NavHeader className="flex-col items-center justify-center">
-          <Text className="text-xl font-semibold text-[#003380ff]">
-            Book a Ride
-          </Text>
-        </NavHeader>
         <View className="pt-5">
           <SearchBar placeholder="Where to? (Search for your desired location)" />
           <View className="px-4">

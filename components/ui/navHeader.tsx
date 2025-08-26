@@ -18,18 +18,19 @@ export default function NavHeader({
   const navigation = useNavigation();
 
   return (
-    <View className="flex-row items-center gap-4 px-4 pb-3 pt-10 ">
+    <View className="flex-row px-4 pb-3 pt-10  fixed">
       {showBack && navigation.canGoBack() && (
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          className={`${className}p-1 bg-white h-12 w-12 flex-col items-center justify-center rounded-full border border-[#003380ff]`}
+          className={`${className}p-1 bg-white h-12 w-12 flex-col items-center justify-center rounded-full`}
         >
           <ArrowLeft size={24} color="#003380ff" />
         </TouchableOpacity>
       )}
 
-      <Text className="text-lg font-bold text-black">{title}</Text>
-      <View className="flex-col items-center justify-center">{children}</View>
+      <View className="absolute left-0 right-0 top-12 items-center justify-center flex-1">
+        <Text>{children}</Text>
+      </View>
     </View>
   );
 }

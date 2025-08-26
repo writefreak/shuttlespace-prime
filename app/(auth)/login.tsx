@@ -1,6 +1,7 @@
 import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import Select from "@/components/ui/select";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, Text, TextInput, View } from "react-native";
@@ -10,6 +11,7 @@ export default function Login() {
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
   const [vehicleSerialNo, setVehicleSerialNo] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -30,11 +32,13 @@ export default function Login() {
             email,
             password,
             vehicleSerialNo,
+            firstName,
           }),
         }
       );
       const data = await response.json();
 
+      console.log(data);
       if (!response) {
         return Alert.alert(
           "Login Failed",
@@ -42,7 +46,10 @@ export default function Login() {
         );
       }
 
-      Alert.alert("Login Successful:", data.user);
+      await AsyncStorage.setItem("firstName", data.user.firstName);
+      console.log(data);
+
+      Alert.alert("Login Successful:", email);
       router.push("/home");
     } catch (error: any) {
       console.error("Login error:", error);

@@ -1,3 +1,4 @@
+import { Dot } from "lucide-react-native";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Badge from "../ui/badge";
 
@@ -12,27 +13,28 @@ export default function Available() {
           {picks.map((p) => (
             <TouchableOpacity
               key={p.id}
-              className="bg-gray-100 p-4 w-96 rounded-xl"
+              className="bg-white border border-neutral-300 w-96 rounded-xl"
             >
-              <View className="flex-row items-center gap-3">
+              <View className="flex-row items-center gap-7 p-3">
                 <View className="w-32 h-32">
                   <Image
                     source={p.img}
                     className="h-full w-full object-cover rounded-xl"
                   />
                 </View>
-                <View className="flex gap-3">
-                  <View>
+                <View className="flex gap-5">
+                  <View className="gap-2">
                     <Text className="text-xl font-semibold">
                       Endwell Heritage
                     </Text>
-                    <Text className="text-[15px] text-gray-400">
+                    <Text className="text-[15px] text-gray-500">
                       Category: {p.cat}
                     </Text>
                   </View>
                   {/* <Rating /> */}
-                  <View className="pt-4">
-                    <Badge>
+                  <View className="">
+                    <Badge className="flex-row">
+                      <Dot />
                       <Text>{p.badgeDesc} </Text>
                     </Badge>
                   </View>

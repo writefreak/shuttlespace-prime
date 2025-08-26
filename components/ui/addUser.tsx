@@ -16,7 +16,9 @@ export default function AddUser({ className }: Props) {
         >
           <UserRound fill={"gray"} strokeWidth={0} height={30} width={30} />
         </View>
-        <TouchableOpacity className="h-8 w-8 rounded-full bg-[#003380ff] flex-row items-center justify-center absolute left-24 ">
+        <TouchableOpacity
+          className={`h-8 w-8 rounded-full bg-[#003380ff] flex-row items-center justify-center absolute left-24 ${className}`}
+        >
           <Plus color={"white"} height={16} width={16} />
         </TouchableOpacity>
       </View>
