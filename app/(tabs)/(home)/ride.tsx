@@ -7,27 +7,35 @@ import { useState } from "react";
 import { Alert, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 export default function Ride() {
-  const handleSelect = (value: string) => {
+  const handleSelectedCat = (value: string) => {
     console.log("Selected option:", value);
+    setDestinationCat(value);
+  };
+  const handleSelectedRideCat = (value: string) => {
+    console.log("Selected option:", value);
+    setrideCategory(value);
   };
 
-  const [pickupLocationId, setPickupLocationId] = useState("");
-  const [destinationId, setDestinationId] = useState("");
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [destinationName, setDestinationName] = useState("");
   const [driverId, setDriverId] = useState("");
   const [destinationCat, setDestinationCat] = useState("");
   const [rideCategory, setrideCategory] = useState("");
+  const [bookingId, setBookingId] = useState("");
 
   const handleBooking = async () => {
     try {
+      const passengerId = "logged123"; //placeholder, I need session
+      const shuttleId = "1234"; //write backend logic to autom assign shuttles available
+
       const res = await fetch(
         "https://shuttlespace-backend.vercel.app/api/shuttle/bookRide",
         {
           method: "POST",
           headers: { "Content-type": "application/json" },
           body: JSON.stringify({
-            pickupLocationId,
-            destinationId,
-            driverId,
+            pickupLocation,
+            destinationName,
             destinationCat,
             rideCategory,
           }),
@@ -35,8 +43,8 @@ export default function Ride() {
       );
 
       if (
-        !pickupLocationId ||
-        !destinationId ||
+        !pickupLocation ||
+        !destinationName ||
         !destinationCat ||
         !rideCategory
       ) {
@@ -44,6 +52,8 @@ export default function Ride() {
       }
       const data = await res.json();
       if (!res.ok) return Alert.alert("Error", data.error);
+
+      setBookingId(data.booking.id);
 
       Alert.alert("Success", "Ride booked successfully!");
       router.push("/bookingDetails");
@@ -77,8 +87,16 @@ export default function Ride() {
                 <View key={i.id} className="flex-col gap-3">
                   <Text className="text-lg">{i.desc}</Text>
                   <TextInput
+                    value={
+                      i.id === "Location" ? pickupLocation : destinationName
+                    }
+                    onChangeText={(text) =>
+                      i.id === "Location"
+                        ? setPickupLocation(text)
+                        : setDestinationName(text)
+                    }
                     className="py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
-                    placeholder="Please enter your current location"
+                    placeholder={i.desc}
                   />
                 </View>
               ))}
@@ -93,7 +111,7 @@ export default function Ride() {
                       "Law/Science",
                       "Management/Env",
                     ]}
-                    onSelect={handleSelect}
+                    onSelect={handleSelectedCat}
                     placeholder="Select a category for your destination"
                   />
                 </View>
@@ -101,7 +119,7 @@ export default function Ride() {
                   <Text className="text-lg ">Ride Category</Text>
                   <Select
                     options={["Shuttle", "Bus", "Minivan", "Drop"]}
-                    onSelect={handleSelect}
+                    onSelect={handleSelectedRideCat}
                     placeholder="Select your ride option"
                   />
                 </View>
@@ -110,7 +128,13 @@ export default function Ride() {
               <View className="flex-row w-full gap-4">
                 {buttonOp.map((b) => (
                   <Button
-                    onPress={() => router.push(b.path as any)}
+                    onPress={() => {
+                      if (b.id === "Continue") {
+                        handleBooking();
+                      } else {
+                        router.push(b.path as any);
+                      }
+                    }}
                     key={b.id}
                     className={
                       b.id === "Continue"

@@ -39,16 +39,16 @@ export default function Login() {
       const data = await response.json();
 
       console.log(data);
-      if (!response) {
+      if (!response.ok) {
         return Alert.alert(
           "Login Failed",
           data.error || "Something Went Wrong"
         );
       }
 
+      await AsyncStorage.setItem("token", data.token);
       await AsyncStorage.setItem("firstName", data.user.firstName);
       console.log(data);
-
       Alert.alert("Login Successful:", email);
       router.push("/home");
     } catch (error: any) {
@@ -70,9 +70,7 @@ export default function Login() {
         <View className="p-4">
           <View className="pt-7 px-4 gap-10">
             <View className="gap-2">
-              <Text className="text-3xl font-medium text-[#003380ff]">
-                Welcome Back 👋
-              </Text>
+              <Text className="text-3xl font-medium">Welcome Back 👋</Text>
               <Text className="text-lg text-neutral-500">
                 Sign into Your Account Here
               </Text>
