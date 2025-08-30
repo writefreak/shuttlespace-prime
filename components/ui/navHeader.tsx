@@ -18,7 +18,7 @@ export default function NavHeader({
   const navigation = useNavigation();
 
   return (
-    <View className="flex-row px-4 pb-3 pt-10  fixed">
+    <View className="flex-row bg-white px-4 pb-6 pt-10  fixed">
       {showBack && navigation.canGoBack() && (
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -28,7 +28,7 @@ export default function NavHeader({
         </TouchableOpacity>
       )}
 
-      <View className="absolute left-0 right-0 top-12 items-center justify-center flex-1">
+      <View className="absolute  left-0 right-0 top-12 items-center justify-center flex-1">
         <Text>{children}</Text>
       </View>
     </View>

@@ -90,9 +90,7 @@ export default function Signup() {
         <View className="p-4">
           <View className="pt-7 px-4 gap-10">
             <View className="gap-2">
-              <Text className="text-3xl font-medium text-[#003380ff]">
-                Hello, Welcome 👋
-              </Text>
+              <Text className="text-3xl font-medium">Hello, Welcome 👋</Text>
               <Text className="text-lg text-neutral-500">
                 Create Your Account Here
               </Text>

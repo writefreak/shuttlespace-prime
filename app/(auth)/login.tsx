@@ -33,6 +33,7 @@ export default function Login() {
             password,
             vehicleSerialNo,
             firstName,
+            role,
           }),
         }
       );
@@ -47,10 +48,22 @@ export default function Login() {
       }
 
       await AsyncStorage.setItem("token", data.token);
+      await AsyncStorage.setItem("email", data.user.email);
       await AsyncStorage.setItem("firstName", data.user.firstName);
+      await AsyncStorage.setItem("role", data.user.role);
+
       console.log(data);
       Alert.alert("Login Successful:", email);
-      router.push("/home");
+
+      //check user roles and redirect based on roles
+
+      if (data.user.role === "passenger") {
+        router.push("/home");
+      } else if (data.user.role === "driver") {
+        router.push("/driveProfile");
+      } else {
+        router.push("/dashboard");
+      }
     } catch (error: any) {
       console.error("Login error:", error);
       Alert.alert("Error", error.message || "Something went wrong");

@@ -2,178 +2,153 @@ import SearchBar from "@/components/home/search-bar";
 import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import Select from "@/components/ui/select";
-import { router } from "expo-router";
-import { useState } from "react";
-import { Alert, ScrollView, Text, TextInput, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useRef, useState } from "react";
+import {
+  Animated,
+  ImageBackground,
+  PanResponder,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+
 export default function Ride() {
-  const handleSelectedCat = (value: string) => {
-    console.log("Selected option:", value);
-    setDestinationCat(value);
-  };
   const handleSelectedRideCat = (value: string) => {
     console.log("Selected option:", value);
-    setrideCategory(value);
+    //  setrideCategory(value);
   };
 
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [destinationName, setDestinationName] = useState("");
-  const [driverId, setDriverId] = useState("");
-  const [destinationCat, setDestinationCat] = useState("");
-  const [rideCategory, setrideCategory] = useState("");
-  const [bookingId, setBookingId] = useState("");
+  //when user clicks on a ride category in home, it automatically selects that category
+  const { ride } = useLocalSearchParams<{ ride?: string }>();
+  const [selectedRide, setSelectedRide] = useState<string | null>(ride || null);
 
-  const handleBooking = async () => {
-    try {
-      const passengerId = "logged123"; //placeholder, I need session
-      const shuttleId = "1234"; //write backend logic to autom assign shuttles available
+  const [currentHeight, setCurrentHeight] = useState(120); // keep track of latest height, inc to add initial height
+  const height = useRef(new Animated.Value(currentHeight)).current;
 
-      const res = await fetch(
-        "https://shuttlespace-backend.vercel.app/api/shuttle/bookRide",
-        {
-          method: "POST",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify({
-            pickupLocation,
-            destinationName,
-            destinationCat,
-            rideCategory,
-          }),
-        }
-      );
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        let newHeight = currentHeight - gestureState.dy; // drag up increases height
+        if (newHeight < 200) newHeight = 200;
+        if (newHeight > 650) newHeight = 650;
+        height.setValue(newHeight);
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        let newHeight = currentHeight - gestureState.dy;
+        if (newHeight < 200) newHeight = 200;
+        if (newHeight > 650) newHeight = 650;
 
-      if (
-        !pickupLocation ||
-        !destinationName ||
-        !destinationCat ||
-        !rideCategory
-      ) {
-        return Alert.alert("Error", "Please fill all fields before booking");
-      }
-      const data = await res.json();
-      if (!res.ok) return Alert.alert("Error", data.error);
+        // Snap animation
+        Animated.spring(height, {
+          toValue: newHeight,
+          useNativeDriver: false,
+        }).start();
 
-      setBookingId(data.booking.id);
-
-      Alert.alert("Success", "Ride booked successfully!");
-      router.push("/bookingDetails");
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "Something went wrong");
-    }
-  };
+        setCurrentHeight(newHeight); // update latest height
+      },
+    })
+  ).current;
 
   return (
-    <SafeAreaView className="bg-white flex-1">
-      <NavHeader className="flex-col items-center justify-center">
-        <Text className="text-xl font-semibold text-[#003380ff]">
-          Book a Ride
-        </Text>
-      </NavHeader>
-      <ScrollView>
-        <View className="pt-5">
-          <SearchBar placeholder="Where to? (Search for your desired location)" />
-          <View className="px-4">
-            <View className="h-72 flex-col items-center justify-center bg-gray-100 rounded-xl">
-              <Text className="text-2xl">Sorry, No Maps Shown Here</Text>
+    <View className="flex-1">
+      <ImageBackground
+        source={require("../../../assets/images/map.png")}
+        className="flex-1"
+        resizeMode="cover"
+      >
+        <View>
+          <NavHeader>
+            <Text className="text-xl font-semibold text-[#003380ff]">
+              Book a Ride
+            </Text>
+          </NavHeader>
+        </View>
+
+        <View className="justify-end flex-1">
+          {/* Bottom sheet that expands/contracts */}
+          <Animated.View
+            {...panResponder.panHandlers}
+            style={{ height }}
+            className="bg-white rounded-t-3xl"
+          >
+            {/* Drag handle */}
+            <View className="w-16 h-1.5 bg-gray-300 rounded-full self-center my-2" />
+
+            <View className="pt-3 pb-3">
+              <SearchBar placeholder="What's your destination?..." />
             </View>
-            <View className="py-8">
-              <Text className="text-2xl font-semibold text-[#003380ff]">
-                Please fill in the following details
-              </Text>
-            </View>
-            <View className="flex-col gap-10">
+            <View className="flex-col gap-7 p-4">
               {inputText.map((i) => (
                 <View key={i.id} className="flex-col gap-3">
-                  <Text className="text-lg">{i.desc}</Text>
+                  <Text className="">{i.desc}</Text>
                   <TextInput
-                    value={
-                      i.id === "Location" ? pickupLocation : destinationName
-                    }
-                    onChangeText={(text) =>
-                      i.id === "Location"
-                        ? setPickupLocation(text)
-                        : setDestinationName(text)
-                    }
                     className="py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
                     placeholder={i.desc}
                   />
                 </View>
               ))}
+            </View>
 
-              <View className="flex-col gap-10">
-                <View className="flex-col gap-3">
-                  <Text className="text-lg ">Destination Category</Text>
-                  <Select
-                    options={[
-                      "MainGate",
-                      "Backgate",
-                      "Law/Science",
-                      "Management/Env",
-                    ]}
-                    onSelect={handleSelectedCat}
-                    placeholder="Select a category for your destination"
-                  />
-                </View>
-                <View className="flex-col gap-3">
-                  <Text className="text-lg ">Ride Category</Text>
-                  <Select
-                    options={["Shuttle", "Bus", "Minivan", "Drop"]}
-                    onSelect={handleSelectedRideCat}
-                    placeholder="Select your ride option"
-                  />
-                </View>
+            <View className="flex-col gap-7  px-4">
+              <View className="flex-col gap-3 pt-3">
+                <Text className=" ">Destination Category</Text>
+                <Select
+                  options={[
+                    "MainGate",
+                    "Backgate",
+                    "Law/Science",
+                    "Management/Env",
+                  ]}
+                  onSelect={handleSelectedRideCat}
+                  placeholder="Select a category for your destination"
+                />
               </View>
-
-              <View className="flex-row w-full gap-4">
-                {buttonOp.map((b) => (
-                  <Button
-                    onPress={() => {
-                      if (b.id === "Continue") {
-                        handleBooking();
-                      } else {
-                        router.push(b.path as any);
-                      }
-                    }}
-                    key={b.id}
-                    className={
-                      b.id === "Continue"
-                        ? `flex-1 py-2  h-12 items-center justify-center`
-                        : " flex-1 h-12 items-center justify-center bg-transparent border border-[#003380ff]"
-                    }
-                  >
-                    <Text
-                      className={
-                        b.id === "Continue"
-                          ? `text-lg`
-                          : "text-lg text-[#003380ff]"
-                      }
-                    >
-                      {b.id}
-                    </Text>
-                  </Button>
-                ))}
+              <View className="flex-col gap-3">
+                <Text className=" ">Ride Category</Text>
+                <Select
+                  options={["Shuttle", "Bus", "Minivan", "Drop"]}
+                  onSelect={handleSelectedRideCat}
+                  value={selectedRide ?? undefined}
+                  placeholder="Select your ride option"
+                />
               </View>
             </View>
-          </View>
+
+            <View className="flex-row w-full gap-4 pt-14 px-4">
+              {buttonOp.map((b) => (
+                <Button
+                  onPress={() => router.push(b.path as any)}
+                  key={b.id}
+                  className={
+                    b.id === "Continue"
+                      ? `flex-1 py-2  h-12 items-center justify-center`
+                      : " flex-1 h-12 items-center justify-center bg-transparent border border-[#003380ff]"
+                  }
+                >
+                  <Text
+                    className={
+                      b.id === "Continue"
+                        ? `text-lg`
+                        : "text-lg text-[#003380ff]"
+                    }
+                  >
+                    {b.id}
+                  </Text>
+                </Button>
+              ))}
+            </View>
+          </Animated.View>
         </View>
-      </ScrollView>
-      {/* <View className="flex-row items-center justify-center pt-10">
-        <Text>Book a Ride</Text>
-      </View> */}
-    </SafeAreaView>
+      </ImageBackground>
+    </View>
   );
 }
 
 const inputText = [
-  {
-    id: "Location",
-    desc: "Please Enter your live location",
-  },
-  {
-    id: "Destination",
-    desc: "Please Enter your Destination",
-  },
+  { id: "Location", desc: "Please Enter your live location" },
+  { id: "Destination", desc: "Please Enter your Destination" },
 ];
 
 const buttonOp = [

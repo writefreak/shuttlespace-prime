@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import {
   ChevronRight,
@@ -8,20 +9,47 @@ import {
   Trash,
   User,
 } from "lucide-react-native";
+import { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AddUser from "../ui/addUser";
 
 export default function ProfileList() {
+  const [firstName, setFirstName] = useState("");
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem("firstName");
+        const storedRole = await AsyncStorage.getItem("role");
+
+        if (storedFirstName) {
+          setFirstName(storedFirstName);
+          console.log("Retrieved Firstname:", storedFirstName);
+        }
+
+        if (storedRole) {
+          setRole(storedRole);
+          console.log("Role:", storedRole);
+        }
+      } catch (error) {
+        console.error("Error", error);
+      }
+    };
+
+    fetch();
+  }, []);
+
   return (
     <SafeAreaView className="">
       <View className="flex-col items-center pt-7">
         <AddUser className="rounded-full h-32 w-32" />
         <View className="flex-col gap-2 items-center">
           <Text className="text-3xl font-semibold text-[#003380ff]">
-            Endwell Heritage
+            {firstName}
           </Text>
-          <Text className="text-xl text-gray-500">Student</Text>
+          <Text className="text-xl text-gray-500">{role}</Text>
         </View>
       </View>
       <View className="px-4 pt-12 pb-5 flex-col gap-6">

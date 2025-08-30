@@ -1,43 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Text, TouchableOpacity, View } from "react-native";
 
 interface SelectProps {
-  options: string[]; // List of options
-  onSelect: (value: string) => void; // Callback when an option is selected
-  placeholder?: string; // Placeholder text
+  options: string[];
+  onSelect: (value: string) => void;
+  placeholder?: string;
+  value?: string | null; // <-- new prop for controlled value
 }
 
 const Select: React.FC<SelectProps> = ({
   options,
   onSelect,
   placeholder = "Select an option",
+  value = null,
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(value);
 
-  // Show the modal
+  // 🔑 Keep in sync with external changes
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelectedOption(value);
+    }
+  }, [value]);
+
   const toggleModal = () => setModalVisible(!isModalVisible);
 
-  // Handle option selection
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    onSelect(option); // Trigger callback with selected option
-    toggleModal(); // Close the modal
+    onSelect(option);
+    toggleModal();
   };
 
   return (
     <View className="relative">
-      {/* Select button that shows the currently selected option */}
       <TouchableOpacity
         onPress={toggleModal}
-        className="bg-white p-4 border placeholder:text-gray-400 border-gray-300 rounded-lg"
+        className="bg-white p-4 border border-gray-300 rounded-lg"
       >
-        <Text className="text-lg text-gray-500">
+        <Text
+          className={`text-lg ${selectedOption ? "text-black" : "text-gray-500"}`}
+        >
           {selectedOption || placeholder}
         </Text>
       </TouchableOpacity>
 
-      {/* Modal displaying options */}
       <Modal
         visible={isModalVisible}
         animationType="slide"
@@ -45,8 +52,8 @@ const Select: React.FC<SelectProps> = ({
         onRequestClose={toggleModal}
       >
         <View className="flex-1 justify-center items-center bg-white/80 backdrop-blur-xl bg-opacity-50">
-          <View className="bg-white w-64 p-5  rounded-lg shadow-lg">
-            <Text className="text-xl font-medium mb-4 ">{placeholder}</Text>
+          <View className="bg-white w-64 p-5 rounded-lg shadow-lg">
+            <Text className="text-xl font-medium mb-4">{placeholder}</Text>
             {options.map((option, index) => (
               <TouchableOpacity
                 key={index}

@@ -15,7 +15,9 @@ export default function RideOptions() {
       <View className="p-4 md:p-0 flex flex-row flex-wrap gap-3 items-center justify-center md:justify-start">
         {rides.map((r) => (
           <TouchableOpacity
-            onPress={() => router.push("/ride")}
+            onPress={() =>
+              router.push({ pathname: "/ride", params: { ride: r.name } })
+            }
             key={r.id}
             className="rounded-2xl w-[13.6rem] h-32 md:w-[5.1rem] md:h-20  bg-gray-100 flex items-center justify-center"
           >
