@@ -1,33 +1,47 @@
 import NavHeader from "@/components/ui/navHeader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
 import { Plus, UserRound } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileDet() {
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  // Use a single state object for user data
   const [userData, setUserData] = useState({
     name: "",
     email: "",
     role: "",
+    image: "", // Add image field
+    id: "", // store user id for upload
   });
 
-  // useEffect to fetch all user data from AsyncStorage
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const storedName = await AsyncStorage.getItem("firstName");
         const storedEmail = await AsyncStorage.getItem("email");
         const storedRole = await AsyncStorage.getItem("role");
+        const storedImage = await AsyncStorage.getItem("image");
+        const storedId = await AsyncStorage.getItem("id");
 
-        // Update the state with fetched data, using a default if not found
         setUserData({
           name: storedName || "N/A",
           email: storedEmail || "N/A",
           role: storedRole || "N/A",
+          image: storedImage || "",
+          id: storedId || "",
         });
       } catch (error) {
         console.error("Failed to fetch user data from AsyncStorage:", error);
@@ -37,7 +51,6 @@ export default function ProfileDet() {
     fetchUserData();
   }, []);
 
-  // Handle changes to any text input field
   const handleChange = (key: keyof typeof userData, text: string) => {
     setUserData((prev) => ({
       ...prev,
@@ -45,7 +58,56 @@ export default function ProfileDet() {
     }));
   };
 
-  // Dynamically create the fields array from the userData state
+  const pickImageAndUpload = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: "images",
+        quality: 1,
+      });
+
+      if (result.canceled) return;
+
+      const uri = result.assets[0].uri;
+      const fileName = uri.split("/").pop() || "profile.jpg";
+
+      const blob = await (await fetch(uri)).blob();
+
+      const formData = new FormData();
+      formData.append("file", {
+        uri,
+        name: fileName,
+        type: blob.type || "image/jpeg",
+      } as any);
+
+      setLoading(true);
+
+      const res = await fetch(
+        "https://shuttlespace-backend.vercel.app/api/users/uploads",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok && data.url) {
+        setUserData((prev) => ({ ...prev, image: data.url }));
+        await AsyncStorage.setItem("image", data.url);
+      } else {
+        Alert.alert("Upload failed", data.error || "Unknown error");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      Alert.alert("Upload error", "Something went wrong during upload.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fields = [
     {
       id: 1,
@@ -81,30 +143,39 @@ export default function ProfileDet() {
           <View className="h-52 border border-gray-300 rounded-xl items-center justify-center gap-4">
             <View>
               <View className="relative">
-                <View
-                  className={`
-            h-20 w-20 rounded-full bg-gray-200 flex-row items-center justify-center`}
-                >
-                  <UserRound
-                    fill={"gray"}
-                    strokeWidth={0}
-                    height={30}
-                    width={30}
-                  />
-                </View>
-                <TouchableOpacity
-                  className={`h-8 w-8 rounded-full bg-[#003380ff] flex-row items-center justify-center absolute left-14 `}
-                >
-                  <Plus color={"white"} height={16} width={16} />
+                <TouchableOpacity onPress={pickImageAndUpload}>
+                  <View className="h-20 w-20 rounded-full bg-gray-200 flex-row items-center justify-center">
+                    {userData.image ? (
+                      <Image
+                        source={{ uri: userData.image }}
+                        style={{ width: 80, height: 80, borderRadius: 40 }}
+                      />
+                    ) : (
+                      <UserRound
+                        fill={"gray"}
+                        strokeWidth={0}
+                        height={30}
+                        width={30}
+                      />
+                    )}
+                  </View>
+                  <View className="h-8 w-8 rounded-full bg-[#003380ff] flex-row items-center justify-center absolute left-14 top-12">
+                    <Plus color={"white"} height={16} width={16} />
+                  </View>
                 </TouchableOpacity>
               </View>
             </View>
             <View className="items-center">
-              <Text className="text-xl font-medium">Add a profile picture</Text>
+              <Text className="text-xl font-medium">
+                {userData.image
+                  ? "Change profile picture"
+                  : "Add a profile picture"}
+              </Text>
               <Text className="text-gray-500">
                 That's how your driver can identify you
               </Text>
             </View>
+            {loading && <ActivityIndicator size="small" color="#003380ff" />}
           </View>
         </View>
 
@@ -117,7 +188,6 @@ export default function ProfileDet() {
               onPress={() => setEditingId(b.id)}
             >
               <Text className="text-lg font-medium">{b.title}</Text>
-
               {editingId === b.id ? (
                 <TextInput
                   value={b.desc}

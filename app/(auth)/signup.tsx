@@ -161,11 +161,15 @@ export default function Signup() {
 
               <View className="gap-3">
                 <Text className="text-neutral-500">Car Model</Text>
-                <TextInput
+                {/* <TextInput
                   value={vehicleType}
                   onChangeText={setVehicleType}
                   placeholder="Enter your car model"
                   className="py-5 bg-gray-100 px-4 rounded-xl"
+                /> */}
+                <Select
+                  onSelect={setVehicleType}
+                  options={["Shuttle", "Bus", "Minibus", "Drop"]}
                 />
               </View>
             </View>

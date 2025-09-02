@@ -1,6 +1,5 @@
 import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
-import Select from "@/components/ui/select";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, router } from "expo-router";
 import { useState } from "react";
@@ -50,6 +49,7 @@ export default function Login() {
       await AsyncStorage.setItem("token", data.token);
       await AsyncStorage.setItem("email", data.user.email);
       await AsyncStorage.setItem("firstName", data.user.firstName);
+      await AsyncStorage.setItem("lastName", data.user.lastName);
       await AsyncStorage.setItem("role", data.user.role);
 
       console.log(data);
@@ -57,9 +57,9 @@ export default function Login() {
 
       //check user roles and redirect based on roles
 
-      if (data.user.role === "passenger") {
+      if (data.user.role === "Passenger") {
         router.push("/home");
-      } else if (data.user.role === "driver") {
+      } else if (data.user.role === "Driver") {
         router.push("/driveProfile");
       } else {
         router.push("/dashboard");
@@ -113,16 +113,16 @@ export default function Login() {
             </View>
 
             {/* Role Selector */}
-            <View className="gap-3">
+            {/* <View className="gap-3">
               <Text className="text-neutral-500">
                 Are you a Passenger or Driver?
               </Text>
               <Select options={["Passenger", "Driver"]} onSelect={setRole} />
-            </View>
+            </View> */}
           </View>
 
           {/* Driver Fields */}
-          {role === "Driver" && (
+          {/* {role === "Driver" && (
             <View className="gap-7 p-4 pt-5">
               <View className="gap-3">
                 <Text className="text-neutral-500">Serial Number</Text>
@@ -134,7 +134,7 @@ export default function Login() {
                 />
               </View>
             </View>
-          )}
+          )} */}
 
           {/* Login Button and Signup Link */}
           <View className="px-4 gap-4 pt-5">

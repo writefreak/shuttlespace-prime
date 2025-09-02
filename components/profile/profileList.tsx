@@ -10,29 +10,36 @@ import {
   User,
 } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AddUser from "../ui/addUser";
 
 export default function ProfileList() {
   const [firstName, setFirstName] = useState("");
+  const [lastName, setlastName] = useState("");
   const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    role: "",
+    image: "", // Add image field
+    id: "", // store user id for upload
+  });
 
   useEffect(() => {
     const fetch = async () => {
       try {
         const storedFirstName = await AsyncStorage.getItem("firstName");
+        const storedLastName = await AsyncStorage.getItem("lastName");
         const storedRole = await AsyncStorage.getItem("role");
+        const storedImage = await AsyncStorage.getItem("image"); // <--- fetch stored image
 
-        if (storedFirstName) {
-          setFirstName(storedFirstName);
-          console.log("Retrieved Firstname:", storedFirstName);
-        }
-
-        if (storedRole) {
-          setRole(storedRole);
-          console.log("Role:", storedRole);
-        }
+        if (storedFirstName) setFirstName(storedFirstName);
+        if (storedLastName) setFirstName(storedLastName);
+        if (storedRole) setRole(storedRole);
+        if (storedImage)
+          setUserData((prev) => ({ ...prev, image: storedImage })); // <--- set image
       } catch (error) {
         console.error("Error", error);
       }
@@ -43,8 +50,17 @@ export default function ProfileList() {
 
   return (
     <SafeAreaView className="">
-      <View className="flex-col items-center pt-7">
-        <AddUser className="rounded-full h-32 w-32" />
+      <View className="flex-col items-center pt-10 gap-8">
+        <TouchableOpacity className="pt-10">
+          <View className="h-28 w-28 rounded-full bg-gray-200 flex-row items-center justify-center">
+            {userData.image && (
+              <Image
+                source={{ uri: userData.image }}
+                style={{ width: 100, height: 100, borderRadius: 100 }}
+              />
+            )}
+          </View>
+        </TouchableOpacity>
         <View className="flex-col gap-2 items-center">
           <Text className="text-3xl font-semibold text-[#003380ff]">
             {firstName}
