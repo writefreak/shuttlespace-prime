@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { Settings } from "lucide-react-native";
 import { useEffect, useState } from "react";
@@ -8,6 +9,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Dashboard() {
   const router = useRouter();
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
   const [rides, setRides] = useState([
     { id: 1, number: "--", details: "Passengers Active" },
     { id: 2, number: "--", details: "Bookings Completed" },
@@ -16,6 +20,24 @@ export default function Dashboard() {
   ]);
 
   const [activities, setActivities] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const storedFirstName = await AsyncStorage.getItem("firstName");
+        const storedLastName = await AsyncStorage.getItem("lastName");
+        if (storedFirstName) {
+          setFirstName(storedFirstName);
+        }
+        if (storedLastName) {
+          setFirstName(storedLastName);
+        }
+      } catch (err) {
+        console.error("Error fetching name", err);
+      }
+    };
+    fetch();
+  }, []);
 
   // Fetch stats
   const fetchStats = async () => {
@@ -83,7 +105,7 @@ export default function Dashboard() {
         <View className="flex-row items-center justify-between">
           <View className="gap-3">
             <Text className="text-2xl md:text-xl font-semibold">
-              Hello, Welcome👋
+              Hello, Welcome {firstName}👋
             </Text>
             <Text className="text-lg text-neutral-500">
               View all your dashboard analytics here
