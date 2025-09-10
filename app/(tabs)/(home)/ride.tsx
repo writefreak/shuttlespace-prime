@@ -1,5 +1,4 @@
 import SearchBar from "@/components/home/search-bar";
-import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import Select from "@/components/ui/select";
 import { router, useLocalSearchParams } from "expo-router";
@@ -10,13 +9,23 @@ import {
   PanResponder,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 
 export default function Ride() {
+  const [rideCategory, setrideCategory] = useState<string | null>(null);
+  const [destinationCat, setDestinationCat] = useState<string | null>(null);
+
+  const [pickupLocationName, setPickupLocationName] = useState("");
+  const [destinationName, setDestinationName] = useState("");
   const handleSelectedRideCat = (value: string) => {
     console.log("Selected option:", value);
-    //  setrideCategory(value);
+    setrideCategory(value);
+  };
+  const handleDestinationCat = (value: string) => {
+    console.log("Selected option:", value);
+    setDestinationCat(value);
   };
 
   //when user clicks on a ride category in home, it automatically selects that category
@@ -84,6 +93,14 @@ export default function Ride() {
                 <View key={i.id} className="flex-col gap-3">
                   <Text className="">{i.desc}</Text>
                   <TextInput
+                    value={
+                      i.id === "Location" ? pickupLocationName : destinationName
+                    }
+                    onChangeText={(text) => {
+                      i.id === "Location"
+                        ? setPickupLocationName(text)
+                        : setDestinationName(text);
+                    }}
                     className="py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
                     placeholder={i.desc}
                   />
@@ -99,9 +116,10 @@ export default function Ride() {
                     "MainGate",
                     "Backgate",
                     "Law/Science",
-                    "Management/Env",
+                    "Management/Environmental",
                   ]}
-                  onSelect={handleSelectedRideCat}
+                  value={destinationCat}
+                  onSelect={handleDestinationCat}
                   placeholder="Select a category for your destination"
                 />
               </View>
@@ -109,7 +127,9 @@ export default function Ride() {
                 <Text className=" ">Ride Category</Text>
                 <Select
                   options={["Shuttle", "Bus", "Minivan", "Drop"]}
-                  onSelect={handleSelectedRideCat}
+                  onSelect={(value) => {
+                    (setSelectedRide(value), setrideCategory(value));
+                  }}
                   value={selectedRide ?? undefined}
                   placeholder="Select your ride option"
                 />
@@ -118,25 +138,40 @@ export default function Ride() {
 
             <View className="flex-row w-full gap-4 pt-14 px-4">
               {buttonOp.map((b) => (
-                <Button
-                  onPress={() => router.push(b.path as any)}
+                <TouchableOpacity
                   key={b.id}
+                  onPress={() => {
+                    if (b.id === "Continue") {
+                      // navigate and pass state to the next page
+                      router.push({
+                        pathname: b.path as any,
+                        params: {
+                          pickupLocationName,
+                          destinationName,
+                          destinationCat,
+                          rideCategory: selectedRide || rideCategory,
+                        },
+                      });
+                    } else {
+                      router.push(b.path as any);
+                    }
+                  }}
                   className={
                     b.id === "Continue"
-                      ? `flex-1 py-2  h-12 items-center justify-center`
-                      : " flex-1 h-12 items-center justify-center bg-transparent border border-[#003380ff]"
+                      ? `flex-1 py-2 h-12 items-center justify-center bg-[#003380ff] rounded-xl`
+                      : "flex-1 h-12 items-center justify-center bg-transparent border border-[#003380ff] rounded-xl"
                   }
                 >
                   <Text
                     className={
                       b.id === "Continue"
-                        ? `text-lg`
+                        ? `text-lg text-white`
                         : "text-lg text-[#003380ff]"
                     }
                   >
                     {b.id}
                   </Text>
-                </Button>
+                </TouchableOpacity>
               ))}
             </View>
           </Animated.View>

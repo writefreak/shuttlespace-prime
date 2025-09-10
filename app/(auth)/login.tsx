@@ -2,6 +2,7 @@ import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, router } from "expo-router";
+import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
 import { Alert, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,6 +14,7 @@ export default function Login() {
   const [firstName, setFirstName] = useState("");
   const [vehicleSerialNo, setVehicleSerialNo] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -101,15 +103,25 @@ export default function Login() {
             </View>
 
             {/* Password Input */}
-            <View className="gap-3">
+            <View className="gap-3 relative">
               <Text className="text-neutral-500">Password</Text>
               <TextInput
                 value={password}
                 onChangeText={setPassword}
                 className="py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
                 placeholder="Enter your Password"
-                secureTextEntry
+                secureTextEntry={!showPassword}
               />
+              <Text
+                onPress={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#003380ff] font-semibold"
+              >
+                {showPassword ? (
+                  <Eye height={20} width={20} />
+                ) : (
+                  <EyeOff height={20} width={20} />
+                )}
+              </Text>
             </View>
 
             {/* Role Selector */}

@@ -2,6 +2,7 @@
 import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import Select from "@/components/ui/select";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, Text, TextInput, View } from "react-native";
@@ -44,6 +45,9 @@ export default function Signup() {
         console.log(payload.role);
       }
 
+      await AsyncStorage.setItem("vehicleSerialNo", vehicleSerialNo);
+      await AsyncStorage.setItem("vehicleType", vehicleType);
+
       const res = await fetch(
         "https://shuttlespace-backend.vercel.app/api/auth/signup",
         {
@@ -81,14 +85,14 @@ export default function Signup() {
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} className="bg-white flex-1">
+      <NavHeader>
+        <Text className="text-xl font-semibold text-[#003380ff]">
+          Create Account
+        </Text>
+      </NavHeader>
       <ScrollView>
-        <NavHeader>
-          <Text className="text-xl font-semibold text-[#003380ff]">
-            Create Account
-          </Text>
-        </NavHeader>
-        <View className="p-4">
-          <View className="pt-7 px-4 gap-10">
+        <View className="p-4 pb-12">
+          <View className="pt-4 px-4 gap-10">
             <View className="gap-2">
               <Text className="text-3xl font-medium">Hello, Welcome 👋</Text>
               <Text className="text-lg text-neutral-500">
@@ -150,7 +154,7 @@ export default function Signup() {
           {role === "Driver" && (
             <View className="gap-7 p-4 pt-5">
               <View className="gap-3">
-                <Text className="text-neutral-500">Plate Number</Text>
+                <Text className="text-neutral-500">Serial Number</Text>
                 <TextInput
                   value={vehicleSerialNo}
                   onChangeText={setVehicleSerialNo}

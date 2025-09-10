@@ -51,7 +51,7 @@ const Select: React.FC<SelectProps> = ({
         transparent={true}
         onRequestClose={toggleModal}
       >
-        <View className="flex-1 justify-center items-center bg-white/80 backdrop-blur-xl bg-opacity-50">
+        <View className="flex-1 justify-center items-center bg-white/50 backdrop-blur-xl bg-opacity-50">
           <View className="bg-white w-64 p-5 rounded-lg shadow-lg">
             <Text className="text-xl font-medium mb-4">{placeholder}</Text>
             {options.map((option, index) => (
