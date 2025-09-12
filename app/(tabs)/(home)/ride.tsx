@@ -1,3 +1,4 @@
+import LocationInput from "@/components/home/locationInput";
 import SearchBar from "@/components/home/search-bar";
 import NavHeader from "@/components/ui/navHeader";
 import Select from "@/components/ui/select";
@@ -8,7 +9,6 @@ import {
   ImageBackground,
   PanResponder,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -91,18 +91,36 @@ export default function Ride() {
             <View className="flex-col gap-7 p-4">
               {inputText.map((i) => (
                 <View key={i.id} className="flex-col gap-3">
-                  <Text className="">{i.desc}</Text>
-                  <TextInput
+                  <Text>{i.desc}</Text>
+                  <LocationInput
+                    placeholder={i.desc}
                     value={
                       i.id === "Location" ? pickupLocationName : destinationName
                     }
                     onChangeText={(text) => {
-                      i.id === "Location"
-                        ? setPickupLocationName(text)
-                        : setDestinationName(text);
+                      if (i.id === "Location") {
+                        setPickupLocationName(text);
+                      } else {
+                        setDestinationName(text);
+                      }
                     }}
-                    className="py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
-                    placeholder={i.desc}
+                    // 👇 Different endpoints based on the input
+                    apiUrl={
+                      i.id === "Location"
+                        ? "https://shuttlespace-backend.vercel.app/api/location/getLocation"
+                        : "https://shuttlespace-backend.vercel.app/api/destination/getDestination"
+                    }
+                    // 👇 capture category when a destination is chosen
+                    onSelectItem={(item) => {
+                      if (i.id === "Destination") {
+                        // user picked a destination suggestion
+                        setDestinationName(item.name);
+                        setDestinationCat(item.category || null); // auto fill category
+                      } else {
+                        // optional: if you want pickup category too, handle here
+                        setPickupLocationName(item.name);
+                      }
+                    }}
                   />
                 </View>
               ))}
@@ -113,7 +131,7 @@ export default function Ride() {
                 <Text className=" ">Destination Category</Text>
                 <Select
                   options={[
-                    "MainGate",
+                    "Maingate",
                     "Backgate",
                     "Law/Science",
                     "Management/Environmental",

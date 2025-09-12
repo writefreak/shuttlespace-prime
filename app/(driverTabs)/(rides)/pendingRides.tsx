@@ -119,7 +119,7 @@ export default function DriverBookingsPage() {
                     <View className="flex-row items-center gap-3">
                       <View className="justify-center h-12 w-12 bg-[#003380ff] rounded-xl items-center gap-3">
                         <Text className="text-2xl font-semibold text-white">
-                          R
+                          {b.passenger?.firstName.charAt(0)}
                         </Text>
                       </View>
                       <Text className=" text-xl font-semibold">

@@ -130,7 +130,7 @@ export default function Dashboard() {
             {rides.map((r) => (
               <View
                 key={r.id}
-                className="rounded-2xl w-[13.6rem] h-32 md:w-[5.1rem] md:h-20 bg-[#003380ff]/20 justify-center px-8"
+                className="rounded-2xl w-[13.6rem] h-32 md:w-[5.1rem] md:h-20 bg-gray-200  justify-center px-8"
               >
                 <View className="gap-3 md:gap-1">
                   <Text className="text-3xl font-medium">{r.number}</Text>
@@ -150,7 +150,7 @@ export default function Dashboard() {
             {activities.map((a) => (
               <View
                 key={a.id}
-                className="h-20 bg-[#003380ff]/20 rounded-2xl p-4 justify-center"
+                className="h-20 border border-gray-300 rounded-2xl p-4 justify-center"
               >
                 <Text>{a.message}</Text>
                 <Text className="text-neutral-500 text-sm">{a.time}</Text>

@@ -83,7 +83,12 @@ export default function AddLocation() {
             <View className="flex-col gap-5 px-4">
               <Text>Location Category</Text>
               <Select
-                options={["Backate", "Maingate", "Management", "Law/Science"]}
+                options={[
+                  "Backgate",
+                  "Maingate",
+                  "Management/Environmental",
+                  "Law/Science",
+                ]}
                 onSelect={setCategory}
                 placeholder="Select category"
               />

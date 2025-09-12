@@ -39,7 +39,7 @@ export default function RecentTrips() {
               </View>
             </View>
 
-            <View className="flex-row mt-3 pt-6">
+            {/* <View className="flex-row mt-3 pt-6">
               <TouchableOpacity className="flex-1 bg-[#003380ff] rounded-xl py-3 mr-2">
                 <Text className="text-white text-center font-semibold">
                   Start Trip
@@ -50,7 +50,7 @@ export default function RecentTrips() {
                   End Trip
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
         ))}
       </View>

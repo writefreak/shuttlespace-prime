@@ -89,7 +89,12 @@ export default function AddDestination() {
           <View className="flex-col gap-7 px-4">
             <Text>Destination Category</Text>
             <Select
-              options={["Backate", "Maingate", "Management", "Law/Science"]}
+              options={[
+                "Backgate",
+                "Maingate",
+                "Management/Environmental",
+                "Law/Science",
+              ]}
               onSelect={setCategory}
               placeholder="Select category"
             />

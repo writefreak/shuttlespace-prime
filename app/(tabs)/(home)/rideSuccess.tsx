@@ -1,10 +1,9 @@
 import TickIcon from "@/components/home/tickIcon";
 import Timer from "@/components/home/timer";
-import Button from "@/components/ui/button";
 import NavHeader from "@/components/ui/navHeader";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EventSource from "react-native-sse";
 
@@ -74,16 +73,13 @@ export default function RideSuccess() {
             </Text>
           )}
 
-          <View className="gap-4 flex-row">
-            <Button
+          <View className="pt-10">
+            <TouchableOpacity
               onPress={() => router.push("/home")}
-              className="h-12 items-center justify-center bg-transparent border border-[#003380ff] flex-1"
+              className="h-12 items-center justify-center rounded-xl  bg-[#003380ff]"
             >
-              <Text className="text-lg text-[#003380ff]">Back to Home</Text>
-            </Button>
-            <Button className="h-12 items-center justify-center flex-1">
-              <Text className="text-lg">View Live Location</Text>
-            </Button>
+              <Text className="text-lg text-white">Back to Home</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

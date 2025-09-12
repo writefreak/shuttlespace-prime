@@ -45,9 +45,12 @@ export default function Signup() {
         console.log(payload.role);
       }
 
-      await AsyncStorage.setItem("vehicleSerialNo", vehicleSerialNo);
-      await AsyncStorage.setItem("vehicleType", vehicleType);
-
+      if (role === "Driver" && vehicleSerialNo) {
+        await AsyncStorage.setItem("vehicleSerialNo", vehicleSerialNo);
+      }
+      if (role === "Driver" && vehicleType) {
+        await AsyncStorage.setItem("vehicleType", vehicleType);
+      }
       const res = await fetch(
         "https://shuttlespace-backend.vercel.app/api/auth/signup",
         {
