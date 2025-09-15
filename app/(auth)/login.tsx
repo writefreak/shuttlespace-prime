@@ -110,6 +110,7 @@ export default function Login() {
                 onChangeText={setPassword}
                 className="py-5 md:py-3 bg-gray-100 px-4 rounded-xl outline-none md:w-full"
                 placeholder="Enter your Password"
+                 placeholderTextColor="#9ca3af"
                 secureTextEntry={!showPassword}
               />
               <Text

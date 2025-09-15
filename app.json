@@ -4,21 +4,35 @@
     "slug": "shuttlespace",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/shuttlespace.png",
+    "icon": "./assets/images/shuttleicon - Copy.png",
     "scheme": "shuttlespacemain",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "splash": {
+        "image": "./assets/images/mainicon.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
     },
     "android": {
-      "usesCleartextTraffic": true,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/shuttlespace.png",
+        "foregroundImage": "./assets/images/mainicon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.shuttlespace"
+      "package": "com.anonymous.shuttlespace",
+      "splash": {
+        "image": "./assets/images/mainicon.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "splash": {
+      "image": "./assets/images/mainicon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
     "web": {
       "bundler": "metro",
@@ -30,12 +44,14 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/shuttlespace.png",
+          "image": "./assets/images/mainicon.png",
           "imageWidth": 800,
           "resizeMode": "cover",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

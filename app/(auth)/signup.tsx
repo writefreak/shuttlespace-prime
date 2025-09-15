@@ -110,6 +110,7 @@ export default function Signup() {
                   value={firstName}
                   onChangeText={setFirstName}
                   placeholder="Enter your First Name"
+                  placeholderTextColor="#9ca3af"
                   className="py-5 bg-gray-100 px-4 rounded-xl"
                 />
               </View>
@@ -120,6 +121,7 @@ export default function Signup() {
                   value={lastName}
                   onChangeText={setLastName}
                   placeholder="Enter your Last Name"
+                  placeholderTextColor="#9ca3af"
                   className="py-5 bg-gray-100 px-4 rounded-xl"
                 />
               </View>
@@ -131,6 +133,7 @@ export default function Signup() {
                   onChangeText={setEmail}
                   placeholder="Enter your Email"
                   keyboardType="email-address"
+                  placeholderTextColor="#9ca3af"
                   className="py-5 bg-gray-100 px-4 rounded-xl"
                 />
               </View>
@@ -141,6 +144,7 @@ export default function Signup() {
                   value={password}
                   onChangeText={setPassword}
                   placeholder="Enter your Password"
+                  placeholderTextColor="#9ca3af"
                   className="py-5 bg-gray-100 px-4 rounded-xl"
                 />
               </View>
@@ -162,6 +166,7 @@ export default function Signup() {
                   value={vehicleSerialNo}
                   onChangeText={setVehicleSerialNo}
                   placeholder="Enter your Shuttle Serial Number"
+                  placeholderTextColor="#9ca3af"
                   className="py-5 bg-gray-100 px-4 rounded-xl"
                 />
               </View>
